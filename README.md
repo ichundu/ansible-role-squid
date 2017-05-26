@@ -1,6 +1,8 @@
 Role Name: squid
 ================
 
+[![Build Status](https://travis-ci.org/ichundu/ansible-role-squid.svg?branch=master)](https://travis-ci.org/ichundu/ansible-role-squid.svg?branch=master)
+
 Installs and allows flexible configuration of squid with parameterized variables.
 
 Requirements
