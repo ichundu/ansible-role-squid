@@ -1,0 +1,75 @@
+# {{ ansible_managed }}
+
+{% if squid_acl_localnet is defined %}
+# Squid ACLs for local networks.
+# Adapt to list your (internal) IP networks from where browsing
+# should be allowed
+{% for item in squid_acl_localnet %}
+acl localnet src {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_acl_defaults is defined %}
+# Squid default ACLs
+{% for item in squid_acl_defaults %}
+acl {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_acl_custom is defined %}
+# Squid custom ACLs
+{% for item in squid_acl_custom %}
+acl {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_http_access is defined %}
+#
+# Access Permission configuration:
+#
+{% for item in squid_http_access %}
+http_access {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_http_ports is defined %}
+# Squid http listen port
+{% for item in squid_http_ports %}
+http_port {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_cache_peers is defined %}
+# Cache peers
+{% for item in squid_cache_peers %}
+cache_peer {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_cache_peers_access is defined %}
+# Cache peers access
+{% for item in squid_cache_peers_access %}
+cache_peer_access {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if squid_cache_dir is defined %}
+# Add a disck cache directory
+cache_dir {{ squid_cache_dir }}
+{% endif %}
+
+{% if squid_coredump_dir is defined %}
+# Leave coredumps in the first cache dir
+coredump_dir {{ squid_coredump_dir }}
+{% endif %}
+
+{% if squid_refresh_patterns is defined %}
+#
+# Add any of your own refresh_pattern entries above these.
+#
+{% for item in squid_refresh_patterns %}
+refresh_pattern {{ item }}
+{% endfor %}
+{% endif %}
+
+# {{ ansible_managed }}

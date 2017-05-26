@@ -1,0 +1,50 @@
+---
+# defaults file for squid
+
+squid_acl_localnet:
+  - 10.0.0.0/8                    # RFC1918 possible internal network
+  - 172.16.0.0/12                 # RFC1918 possible internal network
+  - 192.168.0.0/16                # RFC1918 possible internal network
+  - fc00::/7                      # RFC 4193 local private network range
+  - fe80::/10                     # RFC 4291 link-local (directly plugged) machines
+
+squid_acl_defaults:
+  - SSL_ports port 443
+  - Safe_ports port 80            # http
+  - Safe_ports port 21            # ftp
+  - Safe_ports port 443           # https
+  - Safe_ports port 70            # gopher
+  - Safe_ports port 210           # wais
+  - Safe_ports port 1025-65535    # unregistered ports
+  - Safe_ports port 280           # http-mgmt
+  - Safe_ports port 488           # gss-http
+  - Safe_ports port 591           # filemaker
+  - Safe_ports port 777           # multiling http
+  - CONNECT method CONNECT
+
+squid_acl_custom: []
+
+squid_http_access:
+  - deny !Safe_ports              # Deny requests to certain unsafe ports
+  - deny CONNECT !SSL_ports       # Deny CONNECT to other than secure SSL ports
+  - allow localhost manager       # Only allow cachemgr access from localhost
+  - deny manager                  # Only allow cachemgr access from localhost
+  #-deny to_localhost             # Uncomment to protect web apps who think only local users can connect from localhost
+  - allow localnet                # Allow access from local networks
+  - allow localhost               # Allow acces from localhost
+  - deny all                      # And finally deny all other access to this proxy
+
+squid_http_ports:
+  - 3128
+
+squid_cache_peers: []
+squid_cache_peers_access: []
+
+squid_cache_dir: "ufs /var/spool/squid 100 16 256"
+squid_coredump_dir: "/var/spool/squid"
+
+squid_refresh_patterns:
+  - "^ftp:             1440    20%     10080"
+  - "^gopher:          1440    0%      1440"
+  - "-i (/cgi-bin/|\\?) 0       0%      0"
+  - ".                 0       20%     4320"
