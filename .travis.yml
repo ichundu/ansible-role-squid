@@ -9,11 +9,11 @@ sudo: false
 addons:
   apt:
     packages:
-    - python-pip
+      - python-pip
 
 install:
   # Install ansible
-  - pip install ansible
+  - pip install ansible molecule ansible docker yamllint
 
   # Check ansible version
   - ansible --version
@@ -26,6 +26,9 @@ script:
   - ansible-galaxy install --force -r tests/requirements.yml
   # Basic role syntax check
   - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-
+  # Style check for yaml
+  - find . -name "*.yml" | xargs yamllint
+  # http://molecule.readthedocs.io/en/v1/
+  - molecule test
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
