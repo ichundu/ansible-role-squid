@@ -13,7 +13,7 @@ addons:
 
 install:
   # Install ansible
-  - pip install ansible molecule ansible docker yamllint
+  - pip install ansible molecule docker yamllint
 
   # Check ansible version
   - ansible --version
