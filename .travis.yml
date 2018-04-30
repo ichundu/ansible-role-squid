@@ -3,33 +3,36 @@ language: python
 python: "2.7"
 services:
   - docker
-# Use the new container infrastructure
 sudo: required
 
-# Install ansible
 addons:
   apt:
     packages:
       - python-pip
 
 install:
-  # Install ansible
-  - pip install ansible molecule docker yamllint
+  # Setup python virtualenv
+  - virtualenv --no-site-packages .venv && source .venv/bin/activate
+
+  # Install ansible molecule and docker
+  - pip install ansible molecule docker-py
+
+  # Temporary hack until molecule gets updated to support testinfra 1.12.0
+  # https://github.com/metacloud/molecule/issues/1262
+  - pip install --upgrade testinfra
 
   # Check ansible version
   - ansible --version
 
-  # Create ansible.cfg with correct roles_path
-  - printf '[defaults]\nroles_path=../' >ansible.cfg
+  # Check molecule version
+  - molecule --version
 
 script:
-  # Install role
-  - ansible-galaxy install --force -r tests/requirements.yml
-  # Basic role syntax check
-  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
-  # Style check for yaml
-  - find . -name "*.yml" | xargs yamllint
-  # http://molecule.readthedocs.io/en/v1/
   - molecule test
+
+branches:
+  only:
+    - master
+
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
