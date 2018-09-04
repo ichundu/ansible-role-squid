@@ -29,7 +29,7 @@ squid_http_access:
   - deny CONNECT !SSL_ports       # Deny CONNECT to other than secure SSL ports
   - allow localhost manager       # Only allow cachemgr access from localhost
   - deny manager                  # Only allow cachemgr access from localhost
-  #-deny to_localhost             # Uncomment to protect web apps who think only local users can connect from localhost
+  # -deny to_localhost              # Uncomment to protect web apps who think only local users can connect from localhost
   - allow localnet                # Allow access from local networks
   - allow localhost               # Allow acces from localhost
   - deny all                      # And finally deny all other access to this proxy
